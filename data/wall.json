@@ -1,0 +1,55 @@
+{
+  "site": {
+    "title": "The Wall",
+    "subtitle": "Toutes les pages de révision de la promo, au même endroit.",
+    "promo": "UTBM · FISA01 Informatique"
+  },
+  "updatedAt": "2026-11-11T12:00:00.000Z",
+  "uvs": [
+    {
+      "id": "uv-sr71",
+      "code": "SR71",
+      "name": "Réseaux",
+      "description": "",
+      "links": [
+        {
+          "id": "sr71qcm1",
+          "title": "Atelier de révision — QCM",
+          "url": "https://gustor1.github.io/sr71-revision-qcm/",
+          "description": "Un QCM à la fois : questions Cisco CCNA 1 et 2 traduites, plus 153 QCM complémentaires sur les notions du cours.",
+          "added": "2026-11-11"
+        }
+      ]
+    },
+    {
+      "id": "uv-bd70",
+      "code": "BD70",
+      "name": "Bases de données",
+      "description": "",
+      "links": [
+        {
+          "id": "bd70rev1",
+          "title": "Révisions BD70",
+          "url": "https://gustor1.github.io/revision-bd70/#accueil",
+          "description": "Parcours SQL avec moteur SQL intégré, conception, théorie, sujets blancs, bac à sable et feuille A4.",
+          "added": "2026-11-11"
+        }
+      ]
+    },
+    {
+      "id": "uv-pr70",
+      "code": "PR70",
+      "name": "Programmation Java",
+      "description": "",
+      "links": [
+        {
+          "id": "pr70tpj1",
+          "title": "Révision TP Java",
+          "url": "https://gustor1.github.io/revision-tp-java/#accueil",
+          "description": "94 exercices corrigés sur les 7 TP : textes à trous, « qu'affiche ce code ? », QCM et examens blancs imprimables.",
+          "added": "2026-11-11"
+        }
+      ]
+    }
+  ]
+}

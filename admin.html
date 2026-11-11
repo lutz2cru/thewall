@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Admin · The Wall</title>
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+    />
+    <link rel="stylesheet" href="assets/css/base.css" />
+    <link rel="stylesheet" href="assets/css/admin.css" />
+    <script type="module" src="assets/js/admin.js"></script>
+  </head>
+  <body>
+    <header class="admin-bar">
+      <div class="container admin-bar-inner">
+        <a class="brand" href="./" title="Voir le site public">The Wall <small>admin</small></a>
+        <div class="session" id="session" hidden>
+          <a class="session-repo" id="session-repo" target="_blank" rel="noopener"></a>
+          <img id="session-avatar" alt="" width="28" height="28" />
+          <span class="session-login" id="session-login"></span>
+          <button class="btn ghost sm" type="button" data-action="logout">Déconnexion</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="container admin-main">
+      <!-- Connexion -->
+      <section id="view-login" class="login" hidden>
+        <div class="panel">
+          <h1>Connexion admin</h1>
+          <p class="lead">
+            Chaque modification est enregistrée directement dans le dépôt GitHub du site
+            (<code>data/wall.json</code>), avec un commit à ton nom.
+          </p>
+
+          <form id="login-form" novalidate>
+            <div class="field">
+              <label for="token">Token GitHub</label>
+              <input id="token" type="password" autocomplete="off" spellcheck="false" placeholder="github_pat_… ou ghp_…" />
+              <span class="hint">Il reste dans ton navigateur et n'est envoyé qu'à api.github.com.</span>
+            </div>
+
+            <details class="repo-box" id="repo-box">
+              <summary>Dépôt GitHub — <span class="mono" id="repo-summary">non détecté</span></summary>
+              <div class="row-3">
+                <div class="field">
+                  <label for="owner">Propriétaire</label>
+                  <input id="owner" type="text" autocomplete="off" spellcheck="false" placeholder="pseudo ou orga" />
+                </div>
+                <div class="field">
+                  <label for="repo">Dépôt</label>
+                  <input id="repo" type="text" autocomplete="off" spellcheck="false" placeholder="thewall" />
+                </div>
+                <div class="field">
+                  <label for="branch">Branche</label>
+                  <input id="branch" type="text" autocomplete="off" spellcheck="false" placeholder="par défaut" />
+                </div>
+              </div>
+            </details>
+
+            <label class="check"><input type="checkbox" id="remember" /> Rester connecté sur cet appareil</label>
+            <p class="error-box" id="login-error" role="alert" hidden></p>
+            <button class="btn primary block" type="submit" id="login-submit">Se connecter</button>
+          </form>
+
+          <details class="help">
+            <summary>Comment obtenir un token ?</summary>
+            <ol>
+              <li>Le propriétaire du dépôt t'ajoute comme collaborateur (<em>Settings → Collaborators</em>) ou comme membre de l'organisation.</li>
+              <li>
+                Crée un
+                <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">token « fine-grained »</a> :
+                accès au seul dépôt du mur, permission <b>Contents : Read and write</b>, avec une date d'expiration.
+              </li>
+              <li>
+                Si le dépôt appartient au compte perso de quelqu'un d'autre, GitHub ne le propose pas aux tokens fine-grained : crée alors un
+                <a href="https://github.com/settings/tokens/new?scopes=public_repo&amp;description=The%20Wall%20admin" target="_blank" rel="noopener">token classique</a>
+                avec uniquement la case <b>public_repo</b>.
+              </li>
+              <li>Colle le token ci-dessus. Ne le partage jamais : il permet d'écrire dans le dépôt en ton nom.</li>
+            </ol>
+          </details>
+        </div>
+      </section>
+
+      <!-- Gestion du mur -->
+      <section id="view-app" hidden>
+        <div class="app-head">
+          <div>
+            <p class="app-stats" id="app-stats"></p>
+            <h1>Gérer le mur</h1>
+          </div>
+          <div class="app-actions">
+            <button class="btn primary" type="button" data-action="add-link">+ Ajouter une page</button>
+            <button class="btn" type="button" data-action="add-uv">+ Ajouter une UV</button>
+            <button class="btn ghost" type="button" data-action="refresh" title="Relire la dernière version depuis GitHub">Recharger</button>
+          </div>
+        </div>
+
+        <div class="uv-list" id="uv-list"></div>
+
+        <div class="grid-2">
+          <section class="panel">
+            <h2>Infos du site</h2>
+            <form id="site-form" novalidate>
+              <div class="field">
+                <label for="site-title">Titre</label>
+                <input id="site-title" type="text" maxlength="40" />
+              </div>
+              <div class="field">
+                <label for="site-subtitle">Sous-titre</label>
+                <input id="site-subtitle" type="text" maxlength="140" />
+              </div>
+              <div class="field">
+                <label for="site-promo">Promo</label>
+                <input id="site-promo" type="text" maxlength="60" />
+              </div>
+              <button class="btn" type="submit">Enregistrer et publier</button>
+            </form>
+          </section>
+          <section class="panel">
+            <h2>Dernières modifications</h2>
+            <ol class="history" id="history"></ol>
+          </section>
+        </div>
+      </section>
+    </main>
+
+    <!-- Ajouter / modifier une page -->
+    <dialog id="dlg-link" aria-labelledby="dlg-link-title">
+      <form id="link-form" novalidate>
+        <div class="dlg-body">
+          <h2 id="dlg-link-title">Ajouter une page</h2>
+          <div class="field">
+            <label for="link-url">Adresse de la page</label>
+            <input id="link-url" type="url" inputmode="url" autocomplete="off" spellcheck="false" placeholder="https://pseudo.github.io/revision-xxx/" />
+            <span class="hint warn" id="link-url-dup"></span>
+            <span class="hint" id="link-url-status"></span>
+          </div>
+          <div class="hint-box" id="link-url-suggest" hidden>
+            <span></span>
+            <button class="btn sm" type="button" id="link-url-apply">Utiliser ce lien</button>
+          </div>
+          <div class="field">
+            <label for="link-uv">UV</label>
+            <select id="link-uv"></select>
+          </div>
+          <div class="field">
+            <label for="link-title">Titre</label>
+            <input id="link-title" type="text" maxlength="120" autocomplete="off" />
+          </div>
+          <div class="field">
+            <label for="link-desc">Description <span class="muted">(facultatif)</span></label>
+            <textarea id="link-desc" maxlength="300" rows="3"></textarea>
+          </div>
+          <p class="error-box" role="alert" hidden></p>
+        </div>
+        <div class="dlg-foot">
+          <button class="btn ghost" type="button" data-close>Annuler</button>
+          <button class="btn primary" type="submit" id="link-submit">Publier</button>
+        </div>
+      </form>
+    </dialog>
+
+    <!-- Ajouter / modifier une UV -->
+    <dialog id="dlg-uv" aria-labelledby="dlg-uv-title">
+      <form id="uv-form" novalidate>
+        <div class="dlg-body">
+          <h2 id="dlg-uv-title">Ajouter une UV</h2>
+          <div class="field">
+            <label for="uv-code">Code de l'UV</label>
+            <input id="uv-code" type="text" maxlength="12" autocomplete="off" spellcheck="false" placeholder="SR71" class="mono upper" />
+          </div>
+          <div class="field">
+            <label for="uv-name">Nom</label>
+            <input id="uv-name" type="text" maxlength="80" autocomplete="off" placeholder="Réseaux" />
+          </div>
+          <div class="field">
+            <label for="uv-desc">Description <span class="muted">(facultatif)</span></label>
+            <textarea id="uv-desc" maxlength="240" rows="2"></textarea>
+          </div>
+          <p class="error-box" role="alert" hidden></p>
+        </div>
+        <div class="dlg-foot">
+          <button class="btn ghost" type="button" data-close>Annuler</button>
+          <button class="btn primary" type="submit" id="uv-submit">Publier</button>
+        </div>
+      </form>
+    </dialog>
+
+    <!-- Confirmation -->
+    <dialog id="dlg-confirm" class="dlg-sm" aria-labelledby="dlg-confirm-title">
+      <form method="dialog">
+        <div class="dlg-body">
+          <h2 id="dlg-confirm-title"></h2>
+          <p id="dlg-confirm-text"></p>
+        </div>
+        <div class="dlg-foot">
+          <button class="btn ghost" value="no">Annuler</button>
+          <button class="btn danger" value="yes" id="dlg-confirm-ok">Supprimer</button>
+        </div>
+      </form>
+    </dialog>
+
+    <div class="toast" id="toast" popover="manual" role="status" aria-live="polite"></div>
+  </body>
+</html>

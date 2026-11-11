@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>The Wall · Révisions FISA01 Info</title>
+    <meta name="description" content="Toutes les pages de révision de la promo FISA01 Informatique de l'UTBM, au même endroit." />
+    <meta name="theme-color" content="#f5f3ec" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#11131b" media="(prefers-color-scheme: dark)" />
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+    />
+    <link rel="stylesheet" href="assets/css/base.css" />
+    <link rel="stylesheet" href="assets/css/wall.css" />
+    <script type="module" src="assets/js/wall.js"></script>
+  </head>
+  <body>
+    <a class="skip" href="#wall">Aller aux pages de révision</a>
+
+    <header class="hero container">
+      <p class="eyebrow" id="promo">UTBM · FISA01 Informatique</p>
+      <h1 class="hero-title" id="site-title">The <span class="hl">Wall</span></h1>
+      <p class="hero-sub" id="site-subtitle">Toutes les pages de révision de la promo, au même endroit.</p>
+      <dl class="stats">
+        <div><dt>UV</dt><dd id="stat-uvs">–</dd></div>
+        <div><dt>Pages</dt><dd id="stat-links">–</dd></div>
+        <div><dt>Mis à jour</dt><dd id="stat-updated">–</dd></div>
+      </dl>
+    </header>
+
+    <div class="toolbar">
+      <div class="container toolbar-inner">
+        <div class="search" role="search">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+            <circle cx="11" cy="11" r="7" />
+            <path d="m20 20-3.5-3.5" />
+          </svg>
+          <label class="visually-hidden" for="q">Rechercher une page de révision</label>
+          <input id="q" type="search" placeholder="Rechercher une UV, un sujet…" autocomplete="off" spellcheck="false" />
+          <kbd title="Raccourci clavier">/</kbd>
+        </div>
+        <span class="result-count" id="result-count" aria-live="polite"></span>
+        <nav class="uv-nav" id="uv-nav" aria-label="Aller à une UV"></nav>
+      </div>
+    </div>
+
+    <main id="wall" class="wall container" tabindex="-1">
+      <div class="skeleton" aria-label="Chargement des pages">
+        <span></span><span></span><span></span>
+      </div>
+    </main>
+
+    <footer class="footer container">
+      <span>Fait par et pour la promo · pages hébergées sur GitHub Pages</span>
+      <a href="admin.html">Espace admin</a>
+    </footer>
+  </body>
+</html>
